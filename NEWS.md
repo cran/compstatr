@@ -1,3 +1,12 @@
+# compstatr 0.2.0
+
+* add functionality for directly scraping crime data into `R`:
+    * add `cs_last_update` - checks date of last data release by SLMPD
+    * add `cs_create_index` - creates a full tibble of available month tables
+    * add `cs_get_data` - downloads a month or year worth of crime tables
+    * There is one breaking change for users - to enable these functions, all variable names are standardized into `snake_case` at import. This will impact code that has been written using a prior version of `compstatr`.
+* update `README` and `index.Rmd` with "What's New?" sections
+
 # compstatr 0.1.1
 
 * **initial CRAN submission**

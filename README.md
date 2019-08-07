@@ -14,7 +14,7 @@ status](https://codecov.io/gh/slu-openGIS/compstatr/branch/master/graph/badge.sv
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/compstatr)](https://cran.r-project.org/package=compstatr)
 
 The goal of `compstatr` is to provide a suite of tools for working with
-crime data made public by the City of St. Louis’s [Metropolitan Police
+crime data made public by the City of St. Louis’ [Metropolitan Police
 Department](http://www.slmpd.org).
 
 ## Motivation
@@ -44,9 +44,34 @@ available [on their website](http://www.slmpd.org/Crimereports.shtml) as
 any police department that uses 5 and 6 digit numeric codes to identify
 specific crimes.
 
+## What’s New?
+
+Version v0.2.0 is here\! This updated release of `compstatr` introduces
+three new functions that enable users to access data directly from
+SLMPD’s website without having to download individual data files
+first:
+
+1.  `cs_last_update()` - returns the date of the last available data
+    release on SLMPD’s website
+2.  `cs_create_index()` - creates an index of data sets available on
+    SLMPD’s website for scraping
+3.  `cs_get_data()` - scrapes either a single month or a full year worth
+    of data from SLMPD’s website
+
+In order to enable them, there is one breaking change for users - all
+variable names are standardized into `snake_case` at import. This will
+impact code that has been written using a prior version of `compstatr`.
+
 ## Installation
 
-You can install compstatr from Github with `remotes`:
+The easiest way to get `compstatr` is to install it from CRAN:
+
+``` r
+install.packages("compstatr")
+```
+
+The development version of `compstatr` can be accessed from GitHub with
+`remotes`:
 
 ``` r
 # install.packages("remotes")
@@ -55,22 +80,59 @@ remotes::install_github("slu-openGIS/compstatr")
 
 ## Usage
 
-### Data Preparation
-
-St. Louis data can be downloaded month-by-month from the St. Louis
-Metropolitan Police Department’s
-[website](http://www.slmpd.org/Crimereports.shtml). `compstatr` assumes
-that only one year of crime data (or less) is included in specific
-folders within your project. These next examples assume you have
-downloaded all of the data for 2017 and 2018, and saved them
-respectively in `data/raw/2017` and `data/raw/2018`. We’ll start with
-loading the `compstatr` package:
+We’ll start with loading the `compstatr` package:
 
 ``` r
 > library(compstatr)
 ```
 
-The function `cs_prep_data()` can be used to rename files, which will be
+### Data Access - Read Tables Directly into R
+
+As of version `v0.2.0`, data tables can be scraped and read directly
+into `R` without manually downloading them first. They are read from the
+St. Louis Metropolitan Police Department’s
+[website](http://www.slmpd.org/Crimereports.shtml) and imported directly
+as objects in `R`’s global environment. To identify the last available
+month:
+
+``` r
+> cs_last_update()
+[1] "May 2019"
+```
+
+To enable scraping, an index of the available data needs to be created.
+Doing this is optional but highly recommended to improve performance:
+
+``` r
+> # create index
+> i <- cs_create_index()
+```
+
+This index is used by `cs_get_data()` to find the requested table or
+tables, post a request via the SLMPD website’s form system, and then
+download your data:
+
+``` r
+> # download single month
+> may17 <- cs_get_data(year = 2017, month = "May", index = i)
+>
+> # download full year
+> yearList17 <- cs_get_data(year = 2017, index = i)
+```
+
+Once data are downloaded, they need to be validated and standardized
+before proceeding with analysis.
+
+### Data Access - Use Tables Downloaded Manually
+
+While scraping is now an option, St. Louis data can still be downloaded
+month-by-month from [SLMPD](http://www.slmpd.org/Crimereports.shtml).
+`compstatr` assumes that only one year of crime data (or less) is
+included in specific folders within your project. These next examples
+assume you have downloaded all of the data for 2017 and 2018, and saved
+them respectively in `data/raw/2017` and `data/raw/2018`.
+
+The function `cs_prep_data()` can be used to rename files, which may be
 downloaded with the wrong file extension (`January2018.csv.html`). Once
 downloaded you can load them into what we call year-list objects:
 
@@ -80,7 +142,13 @@ downloaded you can load them into what we call year-list objects:
 > yearList17 <- cs_load_year(path = "data/raw/2017")
 ```
 
-The SLMPD are inconsistently organized, and problems that need to be
+Once data are downloaded, they need to be validated and standardized
+before proceeding with analysis.
+
+### Data Preparation
+
+Both the data downloaded manually as well as the tables scraped from
+SLMPD’s website are inconsistently organized. Problems that need to be
 addressed prior to collapsing a year-list into a single object can be
 identified with `cs_validate()`:
 
@@ -130,7 +198,7 @@ need to be fixed month by month because there are some correct months,
 but years 2008 through 2012 can be fixed en masse:
 
 ``` r
-> yearList08 <- cs_standardize(yearList08, config = 18)
+> yearList08 <- cs_standardize(yearList08, config = 18, month = "all")
 ```
 
 Once the data have been standardized, we can collapse them into a single
@@ -237,5 +305,5 @@ that he worked to identify.
 ## Contributor Code of Conduct
 
 Please note that this project is released with a [Contributor Code of
-Conduct](.github/CODE_OF_CONDUCT.md). By participating in this project
-you agree to abide by its terms.
+Conduct](https://github.com/slu-openGIS/compstatr/blob/master/.github/CODE_OF_CONDUCT.md).
+By participating in this project you agree to abide by its terms.
