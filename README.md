@@ -5,13 +5,15 @@
 
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![Travis-CI Build
-Status](https://travis-ci.org/slu-openGIS/compstatr.svg?branch=master)](https://travis-ci.org/slu-openGIS/compstatr)
+Status](https://travis-ci.com/slu-openGIS/compstatr.svg?branch=master)](https://travis-ci.com/slu-openGIS/compstatr)
 [![AppVeyor Build
 Status](https://ci.appveyor.com/api/projects/status/github/slu-openGIS/compstatr?branch=master&svg=true)](https://ci.appveyor.com/project/chris-prener/compstatr)
 [![Coverage
 status](https://codecov.io/gh/slu-openGIS/compstatr/branch/master/graph/badge.svg)](https://codecov.io/github/slu-openGIS/compstatr?branch=master)
+[![CRAN\_status\_badge](http://www.r-pkg.org/badges/version/compstatr)](https://cran.r-project.org/package=compstatr)
+[![cran
+checks](https://cranchecks.info/badges/worst/compstatr)](https://cran.r-project.org/web/checks/check_results_compstatr.html)
 [![DOI](https://zenodo.org/badge/105331568.svg)](https://zenodo.org/badge/latestdoi/105331568)
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/compstatr)](https://cran.r-project.org/package=compstatr)
 
 The goal of `compstatr` is to provide a suite of tools for working with
 crime data made public by the City of St. Louis’ [Metropolitan Police
@@ -44,23 +46,10 @@ available [on their website](http://www.slmpd.org/Crimereports.shtml) as
 any police department that uses 5 and 6 digit numeric codes to identify
 specific crimes.
 
-## What’s New?
+## What’s New in v0.2.1?
 
-Version v0.2.0 is here\! This updated release of `compstatr` introduces
-three new functions that enable users to access data directly from
-SLMPD’s website without having to download individual data files
-first:
-
-1.  `cs_last_update()` - returns the date of the last available data
-    release on SLMPD’s website
-2.  `cs_create_index()` - creates an index of data sets available on
-    SLMPD’s website for scraping
-3.  `cs_get_data()` - scrapes either a single month or a full year worth
-    of data from SLMPD’s website
-
-In order to enable them, there is one breaking change for users - all
-variable names are standardized into `snake_case` at import. This will
-impact code that has been written using a prior version of `compstatr`.
+Version v0.2.1 addresses a number of bugs, and returns `compstatr` to
+CRAN.
 
 ## Installation
 
